@@ -1,16 +1,34 @@
 package com.lombardo.app
 
-import org.apache.zookeeper.{CreateMode, ZooDefs}
-import services.{ZookeeperHelper, ZookeeperHelperImpl, ZookeeperManagerApi}
+import connectors.{BasicConnectionApi, CuratorConnectionApi}
+import services.{BasicImpl, CuratorImpl, ZooKeeperHelperInterface}
 
 object Main {
   def main(args: Array[String]) {
-    println("Hello from sbt starter pack!")
+    val zkConnectString = sys.env("ZOOKEEPER_CONNECTION_STRING")
 
-    val zkManagerApi = new ZookeeperManagerApi
-    val zkConn = zkManagerApi.getConnection
-    val zkInstanceApi = new ZookeeperHelperImpl(zkConn)
+    println("***** begin zookeeper client implemention*")
+    val zkBasicConnManagerApi = new BasicConnectionApi(zkConnectString)
+    val zkConn = zkBasicConnManagerApi.getConnection
+    val zkInstanceApi = new BasicImpl(zkConn)
 
+    runZkInteractions(zkInstanceApi)
+
+    zkBasicConnManagerApi.close(zkConn)
+    println("***** end zookeeper client implemention")
+
+    println("***** begin curator client implemention*")
+    val curatorConnManagerApi = new CuratorConnectionApi(zkConnectString)
+    val curatorConn = curatorConnManagerApi.getConnection
+    val curatorInstanceApi = new CuratorImpl(curatorConn)
+
+    runZkInteractions(curatorInstanceApi)
+
+    curatorConnManagerApi.close(curatorConn)
+    println("***** end curator client implemention*")
+  }
+
+  def runZkInteractions(client: ZooKeeperHelperInterface) = {
     val path = "/little"
     val nestedPath = path + "/dragon"
     val data1 = "i was looking at the trees"
@@ -18,21 +36,19 @@ object Main {
     val data3 = "thoughts that occurred to me"
     val data4 = "not of the usual kind..."
 
-    if (zkInstanceApi.nodeExists(path)) zkInstanceApi.setData(path, data1)
-    else zkInstanceApi.createNode(path, data1)
+    if (client.nodeExists(path)) client.setData(path, data1)
+    else client.createNode(path, data1)
 
-    println(zkInstanceApi.getData(path))
-    zkInstanceApi.setData(path, data2)
-    println(zkInstanceApi.getData(path))
+    println(client.getData(path))
+    client.setData(path, data2)
+    println(client.getData(path))
 
-    if (zkInstanceApi.nodeExists(nestedPath)) zkInstanceApi.setData(nestedPath, data3)
-    else zkInstanceApi.createNode(nestedPath, data3)
+    if (client.nodeExists(nestedPath)) client.setData(nestedPath, data3)
+    else client.createNode(nestedPath, data3)
 
-    println(zkInstanceApi.getData(nestedPath))
-    zkInstanceApi.setData(nestedPath, data4)
-    println(zkInstanceApi.getData(nestedPath))
-    println(zkInstanceApi.getChildren(path))
-
-    zkManagerApi.close(zkConn)
+    println(client.getData(nestedPath))
+    client.setData(nestedPath, data4)
+    println(client.getData(nestedPath))
+    println(client.getChildren(path))
   }
 }

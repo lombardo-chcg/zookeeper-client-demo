@@ -1,16 +1,15 @@
-package services
+package connectors
 
 import java.util.concurrent.CountDownLatch
 
 import org.apache.zookeeper.Watcher.Event.KeeperState
 import org.apache.zookeeper._
 
-class ZookeeperManagerApi {
-
+class BasicConnectionApi(zkConnectionString: String) {
   val connectedSignal = new CountDownLatch(1)
 
   def getConnection() : ZooKeeper =  {
-    val zkConn = new ZooKeeper("localhost:2181", 5000, new Watcher {
+    val zkConn = new ZooKeeper(zkConnectionString, 5000, new Watcher {
 
       def process(we: WatchedEvent) {
 

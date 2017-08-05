@@ -1,19 +1,14 @@
-# sbt project starter
+# zookeeper client demo
 
-Basic scaffolding for a Scala project built with sbt.
+Exploring the Apache ZooKeeper client library and the Apache Curator client library  
 
-More info: [https://lombardo-chcg.github.io/tools/2017/07/29/sbt-basics.html](https://lombardo-chcg.github.io/tools/2017/07/29/sbt-basics.html) 
+More info:
+* [https://lombardo-chcg.github.io/tools/2017/08/03/zookeeper-client-api.html](https://lombardo-chcg.github.io/tools/2017/08/03/zookeeper-client-api.html)
+* [https://lombardo-chcg.github.io/tools/2017/08/03/zookeeper-client-api-refactoring.html](https://lombardo-chcg.github.io/tools/2017/08/03/zookeeper-client-api-refactoring.html)  
 
+Requirements
+* Running 3.2.1 ZooKeeper instance:
 ```
-sbt run
+docker run -d -p "2181:2181" -e "ZOOKEEPER_CLIENT_PORT=2181" confluentinc/cp-zookeeper:3.2.1
 ```
-
-or 
-
-```
-sbt assembly
-
-docker build -t sbt-starter .
-
-docker run sbt-starter:latest
-```
+* ZOOKEEPER_CONNECTION_STRING env var set inside IDE.  ex: `localhost:2181`
