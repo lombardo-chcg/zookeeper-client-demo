@@ -1,0 +1,56 @@
+version: "2"
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:3.2.1
+    ports:
+      - "2181:2181"
+    hostname: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  zookeeper_client_1:
+    container_name: zookeeper_client_1
+    image: a6d68e714f73
+    hostname: zookeeper_client_1
+    links:
+      - "zookeeper"
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
+
+  zookeeper_client_3:
+    container_name: zookeeper_client_3
+    image: a6d68e714f73
+    hostname: zookeeper_client_3
+    links:
+      - "zookeeper"
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
+
+  zookeeper_client_4:
+    container_name: zookeeper_client_4
+    image: a6d68e714f73
+    hostname: zookeeper_client_4
+    links:
+      - "zookeeper"
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
+
+  zookeeper_client_5:
+    container_name: zookeeper_client_5
+    image: a6d68e714f73
+    hostname: zookeeper_client_5
+    links:
+      - "zookeeper"
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
+
+  zookeeper_client_6:
+    container_name: zookeeper_client_6
+    image: a6d68e714f73
+    hostname: zookeeper_client_6
+    links:
+      - "zookeeper"
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
